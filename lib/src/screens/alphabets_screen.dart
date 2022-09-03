@@ -13,8 +13,8 @@ class AlphabetsScreen extends StatefulWidget {
 
 class _AlphabetsScreenState extends State<AlphabetsScreen> {
   List<Alphabets> alphabets = [
-    Alphabets(name: "A", smallName: "a"),
-    Alphabets(name: "Ә", smallName: "ә"),
+    Alphabets(name: "A", smallName: "alma"),
+    Alphabets(name: "Ә", smallName: "arbuz"),
     Alphabets(name: "Б", smallName: "б")
   ];
   @override
