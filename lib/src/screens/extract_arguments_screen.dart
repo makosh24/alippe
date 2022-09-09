@@ -6,6 +6,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'alphabets_screen.dart';
+
 // A Widget that extracts the necessary arguments from
 // the ModalRoute.
 class ExtractArgumentsScreen extends StatefulWidget {
@@ -30,14 +32,52 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
     return Scaffold(
       appBar:
           AppBar(title: Text(args.title), backgroundColor: Colors.redAccent),
-      body: Container(
-        margin: const EdgeInsets.only(top: 50),
-        child: ElevatedButton(
-          child: Text('play button tap sound ${args.message}'),
-          onPressed: () async {
-            await SoundService.instance.playTapDownSound(args.message);
-          },
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                child: Text('play button tap sound ${args.message}'),
+                onPressed: () async {
+                  await SoundService.instance.playTapDownSound(args.message);
+                },
+              ),
+              ElevatedButton(
+                child: Text('play button tap sound ${args.message}'),
+                onPressed: () async {
+                  await SoundService.instance.playTapDownSound('arbuz');
+                },
+              ),
+            ],
+          ),
+          CCard(
+            width: 100,
+            letter: args.title,
+            smallLetter: '',
+            callback: () async {
+              await SoundService.instance.playTapDownSound(args.message);
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                child: Text('play button tap sound ${args.message}'),
+                onPressed: () async {
+                  await SoundService.instance.playTapDownSound('arbuz');
+                },
+              ),
+              ElevatedButton(
+                child: Text('play button tap sound ${args.message}'),
+                onPressed: () async {
+                  await SoundService.instance.playTapDownSound('arbuz');
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

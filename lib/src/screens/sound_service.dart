@@ -24,9 +24,9 @@ class SoundService {
     );
   }
 
-  Future<void> playTapDownSound(alma) async {
+  Future<void> playTapDownSound(sound) async {
     await _player.play(
-      '$alma.mp3',
+      '$sound.mp3',
       mode: PlayerMode.LOW_LATENCY,
     );
   }
