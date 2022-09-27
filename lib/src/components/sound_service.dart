@@ -24,6 +24,12 @@ class SoundService {
     );
   }
 
+  Future<void> welcomeSound() async {
+    await _player.play(
+      'welcome.mp3',
+    );
+  }
+
   Future<void> playTapDownSound(sound) async {
     await _player.play(
       '$sound.mp3',

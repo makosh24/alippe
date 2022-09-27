@@ -1,16 +1,20 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class CCard extends StatefulWidget {
   final double width;
   final String letter;
   final String smallLetter;
+  final String soundLetter;
   void Function()? callback;
   CCard(
       {Key? key,
       required this.width,
       required this.letter,
       required this.smallLetter,
-      this.callback})
+      this.callback,
+      required this.soundLetter})
       : super(key: key);
 
   @override
@@ -26,7 +30,7 @@ class _CCardState extends State<CCard> {
           // padding: const EdgeInsets.all(20.0),
           // height: 100,
           width: widget.width,
-          color: Colors.grey[300],
+          color: Colors.orange[50],
           child: Center(
             child: InkWell(
               onTap: widget.callback,
@@ -35,7 +39,10 @@ class _CCardState extends State<CCard> {
                 child: Text(
                   widget.letter + " " + widget.smallLetter,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 45),
+                  style: TextStyle(
+                      fontSize: 45,
+                      color: Colors.primaries[
+                          Random().nextInt(Colors.primaries.length)]),
                 ),
               ),
             ),

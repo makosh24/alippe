@@ -1,6 +1,6 @@
 import 'package:alippe/src/components/ccard.dart';
 import 'package:alippe/src/screens/screen_arguments.dart';
-import 'package:alippe/src/screens/sound_service.dart';
+import 'package:alippe/src/components/sound_service.dart';
 import 'package:flutter/material.dart';
 
 import 'alphabets_screen.dart';
@@ -54,8 +54,9 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
               letter: args.title,
               smallLetter: '',
               callback: () async {
-                await SoundService.instance.playTapDownSound(args.message);
+                await SoundService.instance.playTapDownSound(args.soundLetter);
               },
+              soundLetter: '',
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,7 +74,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('play button tap sound ${args.message}'),
+                  child: Text('play button tap sound ${args.soundLetter}'),
                   onPressed: () async {
                     await SoundService.instance.playTapDownSound('arbuz');
                   },

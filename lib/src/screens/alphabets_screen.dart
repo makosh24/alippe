@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:alippe/src/components/ccard.dart';
 import 'package:alippe/src/components/ccarssmall.dart';
 import 'package:alippe/src/screens/screen_arguments.dart';
+import 'package:alippe/src/components/sound_service.dart';
 import 'package:flutter/material.dart';
 
 import 'alphabets.dart';
@@ -15,11 +18,20 @@ class AlphabetsScreen extends StatefulWidget {
 
 class _AlphabetsScreenState extends State<AlphabetsScreen> {
   List<Alphabets> alphabets = [
-    Alphabets(name: "A", smallName: "a"),
-    Alphabets(name: "Ә", smallName: "ә"),
-    Alphabets(name: "Б", smallName: "б"),
-    Alphabets(name: "Ы", smallName: "ы")
+    Alphabets(name: "A", smallName: "a", sound: 'a'),
+    Alphabets(name: "Ә", smallName: "ә", sound: 'a1'),
   ];
+  @override
+  void didChangeDependencies() {
+    // TODO: implement initState
+    super.didChangeDependencies();
+    playWelcomeSound();
+  }
+
+  playWelcomeSound() async {
+    await SoundService.instance.welcomeSound();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,12 +51,25 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  const Text(
-                    "Әліппе әлеміне қош келдің балақай!!!",
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.bold),
+                  InkWell(
+                    onTap: () async {
+                      await playWelcomeSound();
+                    },
+                    child: ClipOval(
+                      child: Container(
+                        color: Colors.white54,
+                        margin: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          "Әріптер әлеміне қош келдің балақай!!!",
+                          style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.primaries[
+                                  Random().nextInt(Colors.primaries.length)],
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 100,
@@ -55,12 +80,16 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
                               width: 100,
                               letter: letter.name,
                               smallLetter: letter.smallName,
+                              soundLetter: letter.sound,
                               callback: () => {
+                                    SoundService.instance
+                                        .playTapDownSound(letter.sound),
                                     Navigator.pushNamed(context,
                                         ExtractArgumentsScreen.routeName,
                                         arguments: ScreenArguments(
                                           letter.name,
                                           letter.smallName,
+                                          letter.sound,
                                         ))
                                   }))
                           .toList(),
