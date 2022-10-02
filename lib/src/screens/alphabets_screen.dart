@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:alippe/src/components/ccard.dart';
-import 'package:alippe/src/components/ccarssmall.dart';
+import 'package:alippe/src/components/ccardsmall.dart';
 import 'package:alippe/src/screens/screen_arguments.dart';
 import 'package:alippe/src/components/sound_service.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +18,24 @@ class AlphabetsScreen extends StatefulWidget {
 
 class _AlphabetsScreenState extends State<AlphabetsScreen> {
   List<Alphabets> alphabets = [
-    Alphabets(name: "A", smallName: "a", sound: 'a'),
-    Alphabets(name: "Ә", smallName: "ә", sound: 'a1'),
+    Alphabets(
+      name: "A",
+      smallName: "a",
+      sound: 'a',
+      image1: 'alma',
+      image2: 'agash',
+      image3: 'asik',
+      image4: 'astau',
+    ),
+    Alphabets(
+      name: "Ә",
+      smallName: "ә",
+      sound: 'a1',
+      image1: 'alma',
+      image2: 'alma',
+      image3: 'alma',
+      image4: 'alma',
+    ),
   ];
   @override
   void didChangeDependencies() {
@@ -78,6 +94,7 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
                       children: alphabets
                           .map((letter) => CCard(
                               width: 100,
+                              height: 100,
                               letter: letter.name,
                               smallLetter: letter.smallName,
                               soundLetter: letter.sound,
@@ -87,10 +104,13 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
                                     Navigator.pushNamed(context,
                                         ExtractArgumentsScreen.routeName,
                                         arguments: ScreenArguments(
-                                          letter.name,
-                                          letter.smallName,
-                                          letter.sound,
-                                        ))
+                                            letter.name,
+                                            letter.smallName,
+                                            letter.sound,
+                                            letter.image1,
+                                            letter.image2,
+                                            letter.image3,
+                                            letter.image4))
                                   }))
                           .toList(),
                     ),

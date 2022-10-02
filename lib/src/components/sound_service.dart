@@ -31,6 +31,7 @@ class SoundService {
   }
 
   Future<void> playTapDownSound(sound) async {
+    print('sasa');
     await _player.play(
       '$sound.mp3',
       mode: PlayerMode.LOW_LATENCY,
