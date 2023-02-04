@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 
 class SoundService {
   // private constructor
@@ -20,21 +21,26 @@ class SoundService {
   );
   Future<void> loadSounds() async {
     await _player.load(
-      'alma.mp3',
+      'alma.mp4',
     );
   }
 
   Future<void> welcomeSound() async {
     await _player.play(
-      'welcome.mp3',
+      'welcome.mp4',
     );
+  }
+
+  Future<void> stopSound() async {
+    if (kDebugMode) {
+      print("не смог остановить");
+    }
   }
 
   Future<void> playTapDownSound(sound) async {
     print('sasa');
     await _player.play(
-      '$sound.mp3',
-      mode: PlayerMode.LOW_LATENCY,
+      '$sound.mp4',
     );
   }
 }

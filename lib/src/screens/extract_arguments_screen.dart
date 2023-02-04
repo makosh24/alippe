@@ -34,7 +34,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
                 image: AssetImage("assets/images/alphabet.jpeg"),
                 fit: BoxFit.cover)),
         child: Padding(
-          padding: const EdgeInsets.only(top: 25.0),
+          padding: const EdgeInsets.only(top: 5.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -51,7 +51,6 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
               ),
               CCard(
                 width: 150,
-                height: 100,
                 letter: args.title,
                 smallLetter: '',
                 callback: () async {
@@ -73,6 +72,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
                     iconSize: 100,
                     color: Colors.red,
                     onPressed: () {
+                      SoundService.instance.stopSound();
                       Navigator.pop(context);
                     },
                   ),

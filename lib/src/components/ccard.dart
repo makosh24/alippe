@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CCard extends StatefulWidget {
   final double width;
-  final double height;
+  // final double height;
   final String letter;
   final String smallLetter;
   final String soundLetter;
@@ -12,7 +12,7 @@ class CCard extends StatefulWidget {
   CCard(
       {Key? key,
       required this.width,
-      required this.height,
+      // required this.height,
       required this.letter,
       required this.smallLetter,
       this.callback,
@@ -30,7 +30,7 @@ class _CCardState extends State<CCard> {
       child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
           // padding: const EdgeInsets.all(20.0),
-          height: widget.height,
+          // height: widget.height,
           width: widget.width,
           color: Colors.orange[50],
           child: Center(

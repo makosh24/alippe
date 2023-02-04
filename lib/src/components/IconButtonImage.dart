@@ -11,9 +11,8 @@ class IconButtonImage extends StatelessWidget {
     return IconButton(
       icon: Image.asset('assets/images/predmets/$imageAsset.png'),
       tooltip: imageAsset,
-      iconSize: 110,
+      iconSize: 130,
       onPressed: () async {
-        print('sds');
         SoundService.instance.playTapDownSound(imageAsset);
       },
     );
