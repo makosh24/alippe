@@ -404,7 +404,7 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/images/fantastic.jpeg"),
+              image: AssetImage("assets/images/semya.jpeg"),
               fit: BoxFit.cover)),
       child: Column(
         children: [
@@ -445,6 +445,8 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
                       children: alphabets
                           .map((letter) => CCard(
                               width: 100,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 5),
                               // height: 100,
                               letter: letter.name,
                               smallLetter: letter.smallName,

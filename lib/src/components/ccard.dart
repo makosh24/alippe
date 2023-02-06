@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class CCard extends StatefulWidget {
   final double width;
+  var margin;
   // final double height;
   final String letter;
   final String smallLetter;
@@ -12,6 +13,7 @@ class CCard extends StatefulWidget {
   CCard(
       {Key? key,
       required this.width,
+      required this.margin,
       // required this.height,
       required this.letter,
       required this.smallLetter,
@@ -28,7 +30,7 @@ class _CCardState extends State<CCard> {
   Widget build(BuildContext context) {
     return ClipOval(
       child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+          margin: widget.margin,
           // padding: const EdgeInsets.all(20.0),
           // height: widget.height,
           width: widget.width,

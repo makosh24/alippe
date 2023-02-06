@@ -31,7 +31,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/images/alphabet.jpeg"),
+                image: AssetImage("assets/images/nurimbagim.jpeg"),
                 fit: BoxFit.cover)),
         child: Padding(
           padding: const EdgeInsets.only(top: 5.0),
@@ -44,20 +44,24 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
                   IconButtonImage(
                     imageAsset: args.image1,
                   ),
+                  CCard(
+                    margin: const EdgeInsets.only(bottom: 1),
+                    width: 150,
+                    letter: args.title,
+                    smallLetter: '',
+                    callback: () async {
+                      await SoundService.instance
+                          .playTapDownSound(args.soundLetter);
+                    },
+                    soundLetter: '',
+                  ),
                   IconButtonImage(
                     imageAsset: args.image2,
                   )
                 ],
               ),
-              CCard(
-                width: 150,
-                letter: args.title,
-                smallLetter: '',
-                callback: () async {
-                  await SoundService.instance
-                      .playTapDownSound(args.soundLetter);
-                },
-                soundLetter: '',
+              const SizedBox(
+                width: 50,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
