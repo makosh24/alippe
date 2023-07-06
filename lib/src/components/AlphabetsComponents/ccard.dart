@@ -3,17 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class CCard extends StatefulWidget {
-  final double width;
-  var margin;
   // final double height;
   final String letter;
   final String smallLetter;
   final String soundLetter;
-  void Function()? callback;
-  CCard(
+  final void Function()? callback;
+  const CCard(
       {Key? key,
-      required this.width,
-      required this.margin,
       // required this.height,
       required this.letter,
       required this.smallLetter,
@@ -28,29 +24,27 @@ class CCard extends StatefulWidget {
 class _CCardState extends State<CCard> {
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: Container(
-          margin: widget.margin,
-          // padding: const EdgeInsets.all(20.0),
-          // height: widget.height,
-          width: widget.width,
-          color: Colors.orange[50],
-          child: Center(
-            child: InkWell(
-              onTap: widget.callback,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Text(
-                  widget.letter + " " + widget.smallLetter,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 45,
-                      color: Colors.primaries[
-                          Random().nextInt(Colors.primaries.length)]),
-                ),
-              ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30),
+        child: Container(
+          constraints: const BoxConstraints(maxHeight: 100, maxWidth: 100),
+          alignment: Alignment.center,
+          color: Colors.black12,
+          child: InkWell(
+            onTap: widget.callback,
+            child: Text(
+              widget.letter + widget.smallLetter,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 70,
+                  color: Colors
+                      .primaries[Random().nextInt(Colors.primaries.length)]),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

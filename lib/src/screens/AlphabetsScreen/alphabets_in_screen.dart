@@ -43,8 +43,6 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
                     imageAsset: args.image1,
                   ),
                   CCard(
-                    margin: const EdgeInsets.only(bottom: 1),
-                    width: 150,
                     letter: args.title,
                     smallLetter: '',
                     callback: () async {

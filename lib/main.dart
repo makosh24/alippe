@@ -7,6 +7,7 @@ void main() {
   // Step 2
   WidgetsFlutterBinding.ensureInitialized();
   // Step 3
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   SystemChrome.setPreferredOrientations([
     // DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
