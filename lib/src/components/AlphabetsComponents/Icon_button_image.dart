@@ -1,10 +1,11 @@
-import 'package:alippe/src/components/sound_service.dart';
+import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
 import 'package:flutter/material.dart';
 
-class IconButtonImage extends StatelessWidget {
-  String imageAsset;
+class IconButtonImageShow extends StatelessWidget {
+  final String imageAsset;
 
-  IconButtonImage({Key? key, required this.imageAsset}) : super(key: key);
+  const IconButtonImageShow({Key? key, required this.imageAsset})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

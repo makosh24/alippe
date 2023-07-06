@@ -1,22 +1,19 @@
-import 'package:alippe/src/components/IconButtonImage.dart';
-import 'package:alippe/src/components/ccard.dart';
-import 'package:alippe/src/screens/screen_arguments.dart';
-import 'package:alippe/src/components/sound_service.dart';
+import 'package:alippe/src/components/AlphabetsComponents/Icon_button_image.dart';
+import 'package:alippe/src/components/AlphabetsComponents/ccard.dart';
+import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
 import 'package:flutter/material.dart';
 
-import 'alphabets_screen.dart';
+import 'alphabet_arguments.dart';
 
-// A Widget that extracts the necessary arguments from
-// the ModalRoute.
-class ExtractArgumentsScreen extends StatefulWidget {
+class AlphabetsInScreen extends StatefulWidget {
   static const routeName = '/extractArgument';
 
-  const ExtractArgumentsScreen({Key? key}) : super(key: key);
+  const AlphabetsInScreen({Key? key}) : super(key: key);
   @override
-  State<ExtractArgumentsScreen> createState() => _ExtractArgumentsScreenState();
+  State<AlphabetsInScreen> createState() => _AlphabetsInScreenState();
 }
 
-class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
+class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
   @override
   void initState() {
     SoundService.instance.loadSounds();
@@ -25,13 +22,14 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final args =
+        ModalRoute.of(context)!.settings.arguments as AlphabetArguments;
 
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/images/nurimbagim.jpeg"),
+                image: AssetImage("assets/images/alphabet.jpeg"),
                 fit: BoxFit.cover)),
         child: Padding(
           padding: const EdgeInsets.only(top: 5.0),
@@ -41,7 +39,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButtonImage(
+                  IconButtonImageShow(
                     imageAsset: args.image1,
                   ),
                   CCard(
@@ -55,7 +53,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
                     },
                     soundLetter: '',
                   ),
-                  IconButtonImage(
+                  IconButtonImageShow(
                     imageAsset: args.image2,
                   )
                 ],
@@ -66,7 +64,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButtonImage(
+                  IconButtonImageShow(
                     imageAsset: args.image3,
                   ),
                   IconButton(
@@ -80,7 +78,7 @@ class _ExtractArgumentsScreenState extends State<ExtractArgumentsScreen> {
                       Navigator.pop(context);
                     },
                   ),
-                  IconButtonImage(
+                  IconButtonImageShow(
                     imageAsset: args.image4,
                   ),
                 ],

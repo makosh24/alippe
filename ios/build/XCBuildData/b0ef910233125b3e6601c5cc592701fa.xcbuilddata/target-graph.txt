@@ -1,0 +1,14 @@
+Target dependency graph (5 targets)
+Flutter in Pods, no dependencies
+audioplayers in Pods, depends on:
+Flutter in Pods (explicit)
+path_provider_ios in Pods, depends on:
+Flutter in Pods (explicit)
+Pods-Runner in Pods, depends on:
+Flutter in Pods (explicit)
+audioplayers in Pods (explicit)
+path_provider_ios in Pods (explicit)
+Runner in Runner, depends on:
+Pods-Runner in Pods (implicit dependency via file 'Pods_Runner.framework' in build phase 'Link Binary')
+audioplayers in Pods (implicit dependency via options '-framework audioplayers' in build setting 'OTHER_LDFLAGS')
+path_provider_ios in Pods (implicit dependency via options '-framework path_provider_ios' in build setting 'OTHER_LDFLAGS')

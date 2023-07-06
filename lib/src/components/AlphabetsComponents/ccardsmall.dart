@@ -10,7 +10,7 @@ class CCardSmall extends StatelessWidget {
       // height: 100,
       width: 20,
       color: Colors.yellow[300],
-      child: Text(
+      child: const Text(
         "A",
         textAlign: TextAlign.center,
         // style: TextStyle(fontSize: 40),
