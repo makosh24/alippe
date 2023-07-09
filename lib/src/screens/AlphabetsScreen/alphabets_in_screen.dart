@@ -2,6 +2,7 @@ import 'package:alippe/src/components/AlphabetsComponents/Icon_button_image.dart
 import 'package:alippe/src/components/AlphabetsComponents/ccard.dart';
 import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import 'alphabet_arguments.dart';
 
@@ -28,61 +29,83 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/alphabet.jpeg"),
-                fit: BoxFit.cover)),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 5.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButtonImageShow(
-                    imageAsset: args.image1,
-                  ),
-                  CCard(
-                    letter: args.title,
-                    smallLetter: '',
-                    callback: () async {
-                      await SoundService.instance
-                          .playTapDownSound(args.soundLetter);
-                    },
-                    soundLetter: '',
-                  ),
-                  IconButtonImageShow(
-                    imageAsset: args.image2,
-                  )
-                ],
-              ),
-              const SizedBox(
-                width: 50,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButtonImageShow(
-                    imageAsset: args.image3,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.close_rounded,
+            // image: DecorationImage(
+            //     image: AssetImage("assets/images/backgroundTree.jpeg"),
+            //     fit: BoxFit.cover)
+            color: Colors.white),
+        child: Stack(
+          children: [
+            Container(
+              color: Colors.amber,
+              child: Align(
+                alignment: Alignment.topCenter,
+                // heightFactor: 0.5,
+                child: FractionalTranslation(
+                  translation: const Offset(0, -0.6),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Lottie.asset(
+                      "assets/images/blue-aquarium.json",
+                      fit: BoxFit.cover,
                     ),
-                    iconSize: 100,
-                    color: Colors.red,
-                    onPressed: () {
-                      SoundService.instance.stopSound();
-                      Navigator.pop(context);
-                    },
                   ),
-                  IconButtonImageShow(
-                    imageAsset: args.image4,
-                  ),
-                ],
+                ),
               ),
-            ],
-          ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButtonImageShow(
+                      imageAsset: args.image1,
+                      isJson: true,
+                    ),
+                    CCard(
+                      letter: args.title,
+                      smallLetter: '',
+                      callback: () async {
+                        await SoundService.instance
+                            .playTapDownSound(args.soundLetter);
+                      },
+                      soundLetter: '',
+                    ),
+                    IconButtonImageShow(
+                      imageAsset: args.image2,
+                      isJson: true,
+                    )
+                  ],
+                ),
+                // Gap(40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButtonImageShow(
+                      imageAsset: args.image3,
+                      isJson: false,
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.exit_to_app_outlined,
+                      ),
+                      iconSize: 100,
+                      color: Colors.red,
+                      onPressed: () {
+                        SoundService.instance.stopSound();
+                        Navigator.pop(context);
+                      },
+                    ),
+                    IconButtonImageShow(
+                      imageAsset: args.image4,
+                      isJson: false,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
