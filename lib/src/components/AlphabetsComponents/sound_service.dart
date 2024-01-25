@@ -16,31 +16,28 @@ class SoundService {
     return _instance!;
   }
 
-  final AudioCache _player = AudioCache(
-    prefix: 'assets/audio/',
-  );
+  AudioPlayer audioPlayer = AudioPlayer();
+
   Future<void> loadSounds() async {
-    await _player.load(
-      'alma.mp4',
-    );
+    await _play('audio/alma.wav');
   }
 
   Future<void> welcomeSound() async {
-    await _player.play(
-      'welcome.mp4',
-    );
+    await _play('audio/welcome.mp4');
   }
 
   Future<void> stopSound() async {
     if (kDebugMode) {
       print("не смог остановить");
     }
+    audioPlayer.stop();
   }
 
-  Future<void> playTapDownSound(sound) async {
-    print('sasa');
-    await _player.play(
-      '$sound.mp4',
-    );
+  Future<void> playTapDownSound(String sound) async {
+    await _play('audio/$sound.wav');
+  }
+
+  Future<void> _play(String assetPath) async {
+    await audioPlayer.play(AssetSource(assetPath));
   }
 }

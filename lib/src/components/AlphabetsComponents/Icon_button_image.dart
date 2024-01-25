@@ -53,7 +53,7 @@ class IconButtonImageShow extends StatelessWidget {
                         child: AnimatedTextKit(
                           animatedTexts: [
                             ColorizeAnimatedText(
-                              'Ванна',
+                              imageAsset,
                               textStyle: const TextStyle(
                                 fontSize: 32.0,
                                 fontWeight: FontWeight.bold,
