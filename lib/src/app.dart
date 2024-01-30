@@ -1,4 +1,5 @@
 import 'package:alippe/src/screens/AlphabetsScreen/alphabets_in_screen.dart';
+import 'package:alippe/src/screens/FairyTalesScreen/fairy_tales_screen.dart';
 import 'package:alippe/src/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        AlphabetsInScreen.routeName: (context) => const AlphabetsInScreen()
+        AlphabetsInScreen.routeName: (context) => const AlphabetsInScreen(),
+        FairyTalesScreen.routeName: (context) => FairyTalesScreen(),
       },
       onGenerateRoute: (settings) {
         return MaterialPageRoute(

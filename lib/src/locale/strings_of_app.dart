@@ -498,3 +498,4 @@ List<Alphabets> alphabets = [
 ];
 
 const alphabetsTitile = "Әріптер әлеміне қош келдің балақай!!!";
+const faityTalesTitle = "Ертегілер";

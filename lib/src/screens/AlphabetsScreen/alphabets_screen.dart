@@ -5,6 +5,7 @@ import 'package:alippe/src/components/AlphabetsComponents/ccardsmall.dart';
 import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
 import 'package:alippe/src/locale/strings_of_app.dart';
 import 'package:alippe/src/screens/AlphabetsScreen/alphabet_arguments.dart';
+import 'package:alippe/src/screens/FairyTalesScreen/fairy_tales_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -63,7 +64,7 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 6),
+                                horizontal: 20, vertical: 3),
                             color: Colors.black12,
                             child: Center(
                               child: Text(
@@ -80,6 +81,19 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
                       ),
                     ),
                   ),
+                  Expanded(
+                      child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, FairyTalesScreen.routeName);
+                    },
+                    child: Text(
+                      faityTalesTitle,
+                      style: TextStyle(
+                          fontSize: 48,
+                          color: Color.fromARGB(255, 230, 86, 24)),
+                    ),
+                  )),
+                  const Gap(8),
                   Expanded(
                     child: ListView(
                       scrollDirection: Axis.horizontal,
@@ -98,9 +112,13 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
                                             letter.smallName,
                                             letter.sound,
                                             letter.image1,
+                                            letter.image1Title,
                                             letter.image2,
+                                            letter.image2Title,
                                             letter.image3,
-                                            letter.image4))
+                                            letter.image3Title,
+                                            letter.image4,
+                                            letter.image4Title))
                                   }))
                           .toList(),
                     ),

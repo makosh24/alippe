@@ -5,10 +5,14 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 class IconButtonImageShow extends StatelessWidget {
   final String imageAsset;
+  final String imageText;
   final bool isJson;
 
   const IconButtonImageShow(
-      {Key? key, required this.imageAsset, required this.isJson})
+      {Key? key,
+      required this.imageAsset,
+      required this.imageText,
+      required this.isJson})
       : super(key: key);
 
   @override
@@ -53,7 +57,7 @@ class IconButtonImageShow extends StatelessWidget {
                         child: AnimatedTextKit(
                           animatedTexts: [
                             ColorizeAnimatedText(
-                              imageAsset,
+                              imageText,
                               textStyle: const TextStyle(
                                 fontSize: 32.0,
                                 fontWeight: FontWeight.bold,

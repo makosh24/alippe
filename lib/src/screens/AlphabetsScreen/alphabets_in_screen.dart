@@ -17,7 +17,7 @@ class AlphabetsInScreen extends StatefulWidget {
 class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
   @override
   void initState() {
-    SoundService.instance.loadSounds();
+    // SoundService.instance.loadSounds();
     super.initState();
   }
 
@@ -61,6 +61,7 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
                   children: [
                     IconButtonImageShow(
                       imageAsset: args.image1,
+                      imageText: args.image1Title,
                       isJson: true,
                     ),
                     CCard(
@@ -74,6 +75,7 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
                     ),
                     IconButtonImageShow(
                       imageAsset: args.image2,
+                      imageText: args.image2Title,
                       isJson: true,
                     )
                   ],
@@ -84,6 +86,7 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
                   children: [
                     IconButtonImageShow(
                       imageAsset: args.image3,
+                      imageText: args.image3Title,
                       isJson: false,
                     ),
                     IconButton(
@@ -99,6 +102,7 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
                     ),
                     IconButtonImageShow(
                       imageAsset: args.image4,
+                      imageText: args.image4Title,
                       isJson: false,
                     ),
                   ],
