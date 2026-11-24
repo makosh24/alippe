@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -36,6 +37,12 @@ class MediaOverrideStore extends ChangeNotifier {
 
   String? audioPath(String id) => _absolute(_items[id]?.audioFile);
 
+  bool get hasAny {
+    return _items.values.any(
+      (item) => item.imageFile != null || item.audioFile != null,
+    );
+  }
+
   Future<void> setImage(String id, String sourcePath) async {
     await _save(id, sourcePath, image: true);
   }
@@ -61,6 +68,98 @@ class MediaOverrideStore extends ChangeNotifier {
         : current.copyWith(audioFile: name);
     await _write(root);
     notifyListeners();
+  }
+
+  Future<File> exportZip(Directory destination) async {
+    await ensureLoaded();
+    final root = await _root();
+    final archive = Archive();
+    final indexBytes = utf8.encode(jsonEncode({
+      'version': 1,
+      'overrides': {
+        for (final entry in _items.entries)
+          entry.key: {
+            'image': entry.value.imageFile,
+            'audio': entry.value.audioFile,
+          },
+      },
+    }));
+    archive.addFile(ArchiveFile('overrides.json', indexBytes.length, indexBytes));
+    final packed = <String>{};
+    for (final item in _items.values) {
+      for (final name in [item.imageFile, item.audioFile]) {
+        if (name == null || !packed.add(name) || !_safeFile(name)) continue;
+        final file = File('${root.path}/$name');
+        if (!file.existsSync()) continue;
+        final bytes = await file.readAsBytes();
+        archive.addFile(ArchiveFile('files/$name', bytes.length, bytes));
+      }
+    }
+    final encoded = ZipEncoder().encode(archive);
+    if (encoded == null) {
+      throw const FormatException('Мұрағат жасалмады');
+    }
+    if (!destination.existsSync()) destination.createSync(recursive: true);
+    final out = File('${destination.path}/alippe-letters.zip');
+    await out.writeAsBytes(encoded, flush: true);
+    return out;
+  }
+
+  Future<int> importZip(File zipFile) async {
+    await ensureLoaded();
+    final bytes = await zipFile.readAsBytes();
+    final archive = ZipDecoder().decodeBytes(bytes);
+    ArchiveFile? index;
+    for (final file in archive) {
+      final name = file.name.replaceAll('\\', '/');
+      if (name == 'overrides.json') index = file;
+    }
+    if (index == null || index.content is! List<int>) {
+      throw const FormatException('Бұл Alippe әріптерінің файлы емес');
+    }
+    final decoded = jsonDecode(utf8.decode(index.content as List<int>));
+    final raw = decoded is Map ? decoded['overrides'] : null;
+    if (raw is! Map) {
+      throw const FormatException('Бұл Alippe әріптерінің файлы емес');
+    }
+
+    final root = await _root();
+    var imported = 0;
+    raw.forEach((key, value) {
+      if (key is! String || key.isEmpty || value is! Map) return;
+      final image = _importedFile(archive, root, value['image']);
+      final audio = _importedFile(archive, root, value['audio']);
+      if (image == null && audio == null) return;
+      final current = _items[key] ?? const MediaOverride();
+      _items[key] = MediaOverride(
+        imageFile: image ?? current.imageFile,
+        audioFile: audio ?? current.audioFile,
+      );
+      imported++;
+    });
+    await _write(root);
+    notifyListeners();
+    return imported;
+  }
+
+  String? _importedFile(Archive archive, Directory root, Object? name) {
+    if (name is! String || !_safeFile(name)) return null;
+    ArchiveFile? packed;
+    for (final file in archive) {
+      final entry = file.name.replaceAll('\\', '/');
+      if (entry == 'files/$name') packed = file;
+    }
+    final content = packed?.content;
+    if (content is! List<int>) return null;
+    File('${root.path}/$name').writeAsBytesSync(content);
+    return name;
+  }
+
+  bool _safeFile(String name) {
+    return name.isNotEmpty &&
+        !name.contains('/') &&
+        !name.contains('\\') &&
+        !name.contains('..');
   }
 
   Future<void> _read() async {

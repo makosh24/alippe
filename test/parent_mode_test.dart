@@ -41,4 +41,24 @@ void main() {
     expect(File(reloaded.imagePath('alma')!).readAsStringSync(), 'picture');
     expect(reloaded.audioPath('zhailau'), isNull);
   });
+
+  test('letter picture and voice survive export and import', () async {
+    final sourceDir = await Directory.systemTemp.createTemp('alippe-src');
+    final otherDir = await Directory.systemTemp.createTemp('alippe-dst');
+    final exportDir = await Directory.systemTemp.createTemp('alippe-zip');
+    final image = File('${sourceDir.path}/new.png')..writeAsStringSync('picture');
+    final audio = File('${sourceDir.path}/new.wav')..writeAsStringSync('voice');
+
+    final source = MediaOverrideStore(directory: sourceDir);
+    await source.setImage('alma', image.path);
+    await source.setAudio('a', audio.path);
+    final zip = await source.exportZip(exportDir);
+
+    final imported = await MediaOverrideStore(directory: otherDir).importZip(zip);
+    expect(imported, 2);
+    final restored = MediaOverrideStore(directory: otherDir);
+    await restored.ensureLoaded();
+    expect(File(restored.imagePath('alma')!).readAsStringSync(), 'picture');
+    expect(File(restored.audioPath('a')!).readAsStringSync(), 'voice');
+  });
 }
