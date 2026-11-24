@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
 import 'package:alippe/src/parent/parent_session.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/builtin_tales.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/tale_editor_screen.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/tale_models.dart';
+import 'package:alippe/src/screens/FairyTalesScreen/tale_reader_screen.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/tale_store.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,7 +21,6 @@ class FairyTalesScreen extends StatefulWidget {
 }
 
 class _FairyTalesScreenState extends State<FairyTalesScreen> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
   final TaleStore _store = TaleStore();
   List<CustomTale> _custom = [];
   var _loading = true;
@@ -31,12 +29,6 @@ class _FairyTalesScreenState extends State<FairyTalesScreen> {
   void initState() {
     super.initState();
     _reload();
-  }
-
-  @override
-  void dispose() {
-    _audioPlayer.dispose();
-    super.dispose();
   }
 
   Future<void> _reload() async {
@@ -131,94 +123,89 @@ class _FairyTalesScreenState extends State<FairyTalesScreen> {
   @override
   Widget build(BuildContext context) {
     final parent = ParentScope.of(context).isParent;
-    return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        _audioPlayer.stop();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Ертегілер'),
-          backgroundColor: Colors.deepPurple,
-          actions: [
-            if (parent) ...[
-              IconButton(
-                tooltip: 'Ертегі қосу',
-                onPressed: () => _openEditor(),
-                icon: const Icon(Icons.add),
-              ),
-              Builder(
-                builder: (buttonContext) {
-                  return IconButton(
-                    tooltip: 'Экспорт',
-                    onPressed: () {
-                      final box = buttonContext.findRenderObject() as RenderBox?;
-                      final origin = box == null
-                          ? null
-                          : box.localToGlobal(Offset.zero) & box.size;
-                      _export(origin);
-                    },
-                    icon: const Icon(Icons.ios_share),
-                  );
-                },
-              ),
-              IconButton(
-                tooltip: 'Импорт',
-                onPressed: _import,
-                icon: const Icon(Icons.file_download_outlined),
-              ),
-            ],
-          ],
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.purple, Colors.indigo],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ертегілер'),
+        backgroundColor: Colors.deepPurple,
+        actions: [
+          if (parent) ...[
+            IconButton(
+              tooltip: 'Ертегі қосу',
+              onPressed: () => _openEditor(),
+              icon: const Icon(Icons.add),
             ),
+            Builder(
+              builder: (buttonContext) {
+                return IconButton(
+                  tooltip: 'Экспорт',
+                  onPressed: () {
+                    final box = buttonContext.findRenderObject() as RenderBox?;
+                    final origin = box == null
+                        ? null
+                        : box.localToGlobal(Offset.zero) & box.size;
+                    _export(origin);
+                  },
+                  icon: const Icon(Icons.ios_share),
+                );
+              },
+            ),
+            IconButton(
+              tooltip: 'Импорт',
+              onPressed: _import,
+              icon: const Icon(Icons.file_download_outlined),
+            ),
+          ],
+        ],
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.purple, Colors.indigo],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Ертегіні таңда балақай!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Ертегіні таңда балақай!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: ListView(
-                  children: [
-                    for (final tale in builtinTales)
-                      _tile(
-                        title: tale.title,
-                        subtitle: tale.audioAsset == null
-                            ? 'Дайын ертегі'
-                            : 'Дайын ертегі, дыбысы бар',
-                        onTap: () => _openBuiltin(tale),
-                      ),
-                    if (_loading)
-                      const Padding(
-                        padding: EdgeInsets.all(12),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                    for (final tale in _custom)
-                      _tile(
-                        title: tale.title,
-                        subtitle: 'Өз ертегім',
-                        onTap: () => _openCustom(tale),
-                        onEdit: parent ? () => _openEditor(tale) : null,
-                        onDelete: parent ? () => _delete(tale) : null,
-                      ),
-                  ],
-                ),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView(
+                children: [
+                  for (final tale in builtinTales)
+                    _tile(
+                      title: tale.title,
+                      subtitle: tale.audioAsset == null
+                          ? 'Дайын ертегі'
+                          : 'Дайын ертегі, дыбысы бар',
+                      onTap: () => _openBuiltin(tale),
+                    ),
+                  if (_loading)
+                    const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  for (final tale in _custom)
+                    _tile(
+                      title: tale.title,
+                      subtitle: 'Өз ертегім',
+                      onTap: () => _openCustom(tale),
+                      onEdit: parent ? () => _openEditor(tale) : null,
+                      onDelete: parent ? () => _delete(tale) : null,
+                    ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -265,82 +252,31 @@ class _FairyTalesScreenState extends State<FairyTalesScreen> {
     );
   }
 
-  Future<void> _openBuiltin(BuiltinTale tale) {
-    return _showReader(
-      title: tale.title,
-      text: tale.text,
-      play: tale.audioAsset == null
-          ? null
-          : () => _audioPlayer.play(AssetSource(tale.audioAsset!)),
+  void _openBuiltin(BuiltinTale tale) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TaleReaderScreen(
+          title: tale.title,
+          text: tale.text,
+          audioAsset: tale.audioAsset,
+        ),
+      ),
     );
   }
 
   Future<void> _openCustom(CustomTale tale) async {
     final path = await _store.audioPathFor(tale);
     if (!mounted) return;
-    return _showReader(
-      title: tale.title,
-      text: tale.text,
-      play: path == null ? null : () => _audioPlayer.play(DeviceFileSource(path)),
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TaleReaderScreen(
+          title: tale.title,
+          text: tale.text,
+          audioFile: path,
+        ),
+      ),
     );
-  }
-
-  Future<void> _showReader({
-    required String title,
-    required String text,
-    required Future<void> Function()? play,
-  }) async {
-    await SoundService.instance.stopSound();
-    await _audioPlayer.stop();
-    if (play != null) await play();
-    if (!mounted) return;
-    var playing = play != null;
-
-    await showDialog<void>(
-      context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            return AlertDialog(
-              title: Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.deepPurple,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              content: SizedBox(
-                width: MediaQuery.of(dialogContext).size.width * 0.7,
-                child: SingleChildScrollView(
-                  child: Text(
-                    text,
-                    style: const TextStyle(color: Colors.deepPurple, fontSize: 18),
-                  ),
-                ),
-              ),
-              actions: [
-                if (play != null)
-                  IconButton(
-                    onPressed: () async {
-                      if (playing) {
-                        await _audioPlayer.pause();
-                      } else {
-                        await _audioPlayer.resume();
-                      }
-                      setDialogState(() => playing = !playing);
-                    },
-                    icon: Icon(playing ? Icons.pause_circle : Icons.play_circle),
-                  ),
-                TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(),
-                  child: const Text('Шығу'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-    await _audioPlayer.stop();
   }
 }

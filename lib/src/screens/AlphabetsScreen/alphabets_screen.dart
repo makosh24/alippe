@@ -55,54 +55,58 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
           children: [
             Row(
               children: [
-                const Spacer(),
+                TextButton.icon(
+                  onPressed: () {
+                    _leaveHome();
+                    Navigator.pushNamed(context, FairyTalesScreen.routeName);
+                  },
+                  icon:
+                      const Icon(Icons.auto_stories, color: Color(0xFFE65618)),
+                  label: const Text(
+                    faityTalesTitle,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFE65618),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(60),
+                      child: InkWell(
+                        onTap: () => SoundService.instance.welcomeSound(),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 6,
+                          ),
+                          color: Colors.black12,
+                          child: Text(
+                            alphabetsTitile,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.primaries.first,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 IconButton(
                   tooltip: 'Баптаулар',
                   onPressed: () {
                     _leaveHome();
                     Navigator.pushNamed(context, SettingsScreen.routeName);
                   },
-                  icon: const Icon(Icons.settings, size: 32, color: Color(0xFF16324F)),
+                  icon: const Icon(Icons.settings,
+                      size: 32, color: Color(0xFF16324F)),
                 ),
               ],
-            ),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: InkWell(
-                  onTap: () => SoundService.instance.welcomeSound(),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 3,
-                    ),
-                    color: Colors.black12,
-                    child: Text(
-                      alphabetsTitile,
-                      style: TextStyle(
-                        fontSize: 35,
-                        color: Colors.primaries.first,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                _leaveHome();
-                Navigator.pushNamed(context, FairyTalesScreen.routeName);
-              },
-              child: const Text(
-                faityTalesTitle,
-                style: TextStyle(
-                  fontSize: 40,
-                  color: Color.fromARGB(255, 230, 86, 24),
-                ),
-              ),
             ),
             Expanded(
               child: ClipRect(
