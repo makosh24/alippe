@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:alippe/src/components/AlphabetsComponents/media_names.dart';
+import 'package:alippe/src/parent/media_override_store.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +29,12 @@ class SoundService {
   }
 
   Future<void> playTapDownSound(String sound) async {
+    final override = MediaOverrideStore.instance.audioPath(sound);
+    if (override != null && File(override).existsSync()) {
+      await audioPlayer.stop();
+      await audioPlayer.play(DeviceFileSource(override));
+      return;
+    }
     await _play(audioAssetFor(sound));
   }
 

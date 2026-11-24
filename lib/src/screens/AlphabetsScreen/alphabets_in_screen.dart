@@ -2,6 +2,8 @@ import 'package:alippe/src/components/AlphabetsComponents/Icon_button_image.dart
 import 'package:alippe/src/components/AlphabetsComponents/aquarium_background.dart';
 import 'package:alippe/src/components/AlphabetsComponents/ccard.dart';
 import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
+import 'package:alippe/src/parent/parent_session.dart';
+import 'package:alippe/src/parent/replace_media.dart';
 import 'package:alippe/src/locale/strings_of_app.dart';
 import 'package:alippe/src/screens/AlphabetsScreen/alphabets.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,7 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
     final colorIndex = alphabets.indexWhere((letter) => letter.name == args.name);
     final color = Colors.primaries[
         (colorIndex < 0 ? 0 : colorIndex) % Colors.primaries.length];
+    final parent = ParentScope.of(context).isParent;
 
     return Scaffold(
       body: AquariumBackground(
@@ -52,14 +55,25 @@ class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
                   children: [
                     _wordSlot(args, 0),
                     Center(
-                      child: CCard(
-                        letter: args.name,
-                        smallLetter: '',
-                        color: color,
-                        filled: false,
-                        callback: () {
-                          SoundService.instance.playTapDownSound(args.sound);
-                        },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CCard(
+                            letter: args.name,
+                            smallLetter: '',
+                            color: color,
+                            filled: false,
+                            callback: () {
+                              SoundService.instance.playTapDownSound(args.sound);
+                            },
+                          ),
+                          if (parent)
+                            IconButton(
+                              tooltip: 'Әріп дауысын ауыстыру',
+                              onPressed: () => replaceAudio(context, args.sound),
+                              icon: const Icon(Icons.mic, color: Colors.white, size: 32),
+                            ),
+                        ],
                       ),
                     ),
                     _wordSlot(args, 1),

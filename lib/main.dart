@@ -1,12 +1,15 @@
 import 'package:alippe/src/app.dart';
+import 'package:alippe/src/parent/media_override_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  SystemChrome.setPreferredOrientations([
+  await MediaOverrideStore.instance.ensureLoaded();
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
-  ]).then((_) => runApp(const MyApp()));
+  ]);
+  runApp(const MyApp());
 }

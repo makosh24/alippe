@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:alippe/src/components/AlphabetsComponents/media_names.dart';
 import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
+import 'package:alippe/src/parent/media_override_store.dart';
+import 'package:alippe/src/parent/parent_session.dart';
+import 'package:alippe/src/parent/replace_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -23,6 +28,7 @@ class IconButtonImageShow extends StatefulWidget {
 class _IconButtonImageShowState extends State<IconButtonImageShow> {
   String? _pngId;
   String? _lottieId;
+  String? _overrideImage;
   bool _ready = false;
 
   @override
@@ -41,6 +47,8 @@ class _IconButtonImageShowState extends State<IconButtonImageShow> {
   }
 
   Future<void> _resolve() async {
+    await MediaOverrideStore.instance.ensureLoaded();
+    final override = MediaOverrideStore.instance.imagePath(widget.imageAsset);
     String? pngId;
     String? lottieId;
     for (final candidate in imageCandidates(widget.imageAsset)) {
@@ -55,6 +63,7 @@ class _IconButtonImageShowState extends State<IconButtonImageShow> {
     }
     if (!mounted) return;
     setState(() {
+      _overrideImage = override;
       _pngId = pngId;
       _lottieId = lottieId;
       _ready = true;
@@ -66,6 +75,14 @@ class _IconButtonImageShowState extends State<IconButtonImageShow> {
   }
 
   Widget _picture({required bool enlarged}) {
+    final override = _overrideImage;
+    if (override != null) {
+      return Image.file(
+        File(override),
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => _titleFallback(),
+      );
+    }
     final pngId = _pngId;
     final lottieId = _lottieId;
     if (pngId != null) {
@@ -190,24 +207,40 @@ class _IconButtonImageShowState extends State<IconButtonImageShow> {
           ),
         ),
         const SizedBox(height: 4),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            child: Text(
-              widget.imageText,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF16324F),
+        Row(
+          children: [
+            Expanded(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
+                    widget.imageText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF16324F),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            if (ParentScope.of(context).isParent)
+              IconButton(
+                tooltip: 'Өзгерту',
+                onPressed: () async {
+                  await replaceWordMedia(context, widget.imageAsset);
+                  if (mounted) await _resolve();
+                },
+                icon: const Icon(Icons.edit, color: Colors.white),
+              ),
+          ],
         ),
       ],
     );

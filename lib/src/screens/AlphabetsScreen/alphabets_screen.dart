@@ -4,6 +4,7 @@ import 'package:alippe/src/locale/strings_of_app.dart';
 import 'package:alippe/src/screens/AlphabetsScreen/alphabets.dart';
 import 'package:alippe/src/screens/AlphabetsScreen/alphabets_in_screen.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/fairy_tales_screen.dart';
+import 'package:alippe/src/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -47,7 +48,19 @@ class _AlphabetsScreenState extends State<AlphabetsScreen> {
       child: SafeArea(
         child: Column(
           children: [
-            const Gap(8),
+            Row(
+              children: [
+                const Spacer(),
+                IconButton(
+                  tooltip: 'Баптаулар',
+                  onPressed: () {
+                    _leaveHome();
+                    Navigator.pushNamed(context, SettingsScreen.routeName);
+                  },
+                  icon: const Icon(Icons.settings, size: 32, color: Color(0xFF16324F)),
+                ),
+              ],
+            ),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: ClipRRect(

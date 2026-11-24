@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
+import 'package:alippe/src/parent/parent_session.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/builtin_tales.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/tale_editor_screen.dart';
 import 'package:alippe/src/screens/FairyTalesScreen/tale_models.dart';
@@ -129,6 +130,7 @@ class _FairyTalesScreenState extends State<FairyTalesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final parent = ParentScope.of(context).isParent;
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         _audioPlayer.stop();
@@ -138,31 +140,33 @@ class _FairyTalesScreenState extends State<FairyTalesScreen> {
           title: const Text('Ертегілер'),
           backgroundColor: Colors.deepPurple,
           actions: [
-            IconButton(
-              tooltip: 'Ертегі қосу',
-              onPressed: () => _openEditor(),
-              icon: const Icon(Icons.add),
-            ),
-            Builder(
-              builder: (buttonContext) {
-                return IconButton(
-                  tooltip: 'Экспорт',
-                  onPressed: () {
-                    final box = buttonContext.findRenderObject() as RenderBox?;
-                    final origin = box == null
-                        ? null
-                        : box.localToGlobal(Offset.zero) & box.size;
-                    _export(origin);
-                  },
-                  icon: const Icon(Icons.ios_share),
-                );
-              },
-            ),
-            IconButton(
-              tooltip: 'Импорт',
-              onPressed: _import,
-              icon: const Icon(Icons.file_download_outlined),
-            ),
+            if (parent) ...[
+              IconButton(
+                tooltip: 'Ертегі қосу',
+                onPressed: () => _openEditor(),
+                icon: const Icon(Icons.add),
+              ),
+              Builder(
+                builder: (buttonContext) {
+                  return IconButton(
+                    tooltip: 'Экспорт',
+                    onPressed: () {
+                      final box = buttonContext.findRenderObject() as RenderBox?;
+                      final origin = box == null
+                          ? null
+                          : box.localToGlobal(Offset.zero) & box.size;
+                      _export(origin);
+                    },
+                    icon: const Icon(Icons.ios_share),
+                  );
+                },
+              ),
+              IconButton(
+                tooltip: 'Импорт',
+                onPressed: _import,
+                icon: const Icon(Icons.file_download_outlined),
+              ),
+            ],
           ],
         ),
         body: Container(
@@ -207,8 +211,8 @@ class _FairyTalesScreenState extends State<FairyTalesScreen> {
                         title: tale.title,
                         subtitle: 'Өз ертегім',
                         onTap: () => _openCustom(tale),
-                        onEdit: () => _openEditor(tale),
-                        onDelete: () => _delete(tale),
+                        onEdit: parent ? () => _openEditor(tale) : null,
+                        onDelete: parent ? () => _delete(tale) : null,
                       ),
                   ],
                 ),
