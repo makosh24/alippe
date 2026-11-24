@@ -1,27 +1,19 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-class CCard extends StatefulWidget {
-  // final double height;
+class CCard extends StatelessWidget {
   final String letter;
   final String smallLetter;
-  final String soundLetter;
+  final Color color;
   final void Function()? callback;
-  const CCard(
-      {Key? key,
-      // required this.height,
-      required this.letter,
-      required this.smallLetter,
-      this.callback,
-      required this.soundLetter})
-      : super(key: key);
 
-  @override
-  State<CCard> createState() => _CCardState();
-}
+  const CCard({
+    Key? key,
+    required this.letter,
+    required this.smallLetter,
+    required this.color,
+    this.callback,
+  }) : super(key: key);
 
-class _CCardState extends State<CCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,14 +25,14 @@ class _CCardState extends State<CCard> {
           alignment: Alignment.center,
           color: Colors.black12,
           child: InkWell(
-            onTap: widget.callback,
+            onTap: callback,
             child: Text(
-              widget.letter + widget.smallLetter,
+              '$letter$smallLetter',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 70,
-                  color: Colors
-                      .primaries[Random().nextInt(Colors.primaries.length)]),
+                fontSize: 70,
+                color: color,
+              ),
             ),
           ),
         ),

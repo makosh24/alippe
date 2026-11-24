@@ -44,3 +44,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Signing secrets. Keep key.properties and keystores on the machine only.
+key.properties
+**/*.jks
+**/*.keystore

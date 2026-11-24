@@ -1,17 +1,31 @@
-# alippe
+# Alippe
 
-A new Flutter project.
+Детский букварь: казахский алфавит и одна сказка. Приложение работает офлайн, в альбомной ориентации. Ребёнок нажимает букву, слышит звук и открывает слова-картинки.
 
-## Getting Started
+## Запуск
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+Нужен Flutter 3.41 (Dart 3.11) или новее.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Что внутри
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# alippe
+- 42 буквы казахского кириллического алфавита, в двух рядах.
+- Звук буквы и до четырёх слов. Если картинки или звука нет, экран не падает: остаётся слово текстом.
+- Раздел «Ертегілер». Сейчас там сказка «Үйрек туралы ертегі».
+
+Картинки лежат в `assets/images/predmets`, звуки в `assets/audio`. Если имя в данных и имя файла расходятся, соответствие записано в `lib/src/components/AlphabetsComponents/media_names.dart`.
+
+## Подпись Android
+
+Пароли keystore читаются из `key.properties` в корне проекта. Этот файл и `*.jks` не должны попадать в git. Debug-сборка использует обычный debug-ключ.
+
+## Проверки
+
+```bash
+flutter test
+flutter analyze
+```

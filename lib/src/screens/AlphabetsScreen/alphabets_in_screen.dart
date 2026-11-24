@@ -1,117 +1,118 @@
 import 'package:alippe/src/components/AlphabetsComponents/Icon_button_image.dart';
 import 'package:alippe/src/components/AlphabetsComponents/ccard.dart';
 import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
+import 'package:alippe/src/locale/strings_of_app.dart';
+import 'package:alippe/src/screens/AlphabetsScreen/alphabets.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
-import 'alphabet_arguments.dart';
 
 class AlphabetsInScreen extends StatefulWidget {
   static const routeName = '/extractArgument';
 
   const AlphabetsInScreen({Key? key}) : super(key: key);
+
   @override
   State<AlphabetsInScreen> createState() => _AlphabetsInScreenState();
 }
 
 class _AlphabetsInScreenState extends State<AlphabetsInScreen> {
   @override
-  void initState() {
-    // SoundService.instance.loadSounds();
-    super.initState();
+  void dispose() {
+    SoundService.instance.stopSound();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as AlphabetArguments;
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is! Alphabets) {
+      return Scaffold(
+        body: Center(
+          child: IconButton(
+            iconSize: 72,
+            color: Colors.red,
+            onPressed: () => Navigator.maybePop(context),
+            icon: const Icon(Icons.arrow_back),
+          ),
+        ),
+      );
+    }
+
+    final colorIndex = alphabets.indexWhere((letter) => letter.name == args.name);
+    final color = Colors.primaries[
+        (colorIndex < 0 ? 0 : colorIndex) % Colors.primaries.length];
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-            // image: DecorationImage(
-            //     image: AssetImage("assets/images/backgroundTree.jpeg"),
-            //     fit: BoxFit.cover)
-            color: Colors.white),
+        color: Colors.white,
         child: Stack(
           children: [
-            Container(
-              color: Colors.amber,
-              child: Align(
-                alignment: Alignment.topCenter,
-                // heightFactor: 0.5,
-                child: FractionalTranslation(
-                  translation: const Offset(0, -0.6),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: Lottie.asset(
-                      "assets/images/blue-aquarium.json",
-                      fit: BoxFit.cover,
-                    ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: FractionalTranslation(
+                translation: const Offset(0, -0.6),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Lottie.asset(
+                    "assets/images/blue-aquarium.json",
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButtonImageShow(
-                      imageAsset: args.image1,
-                      imageText: args.image1Title,
-                      isJson: true,
+            SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _wordSlot(args, 0),
+                        CCard(
+                          letter: args.name,
+                          smallLetter: '',
+                          color: color,
+                          callback: () {
+                            SoundService.instance.playTapDownSound(args.sound);
+                          },
+                        ),
+                        _wordSlot(args, 1),
+                      ],
                     ),
-                    CCard(
-                      letter: args.title,
-                      smallLetter: '',
-                      callback: () async {
-                        await SoundService.instance
-                            .playTapDownSound(args.soundLetter);
-                      },
-                      soundLetter: '',
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _wordSlot(args, 2),
+                        IconButton(
+                          icon: const Icon(Icons.exit_to_app_outlined),
+                          iconSize: 72,
+                          color: Colors.red,
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        _wordSlot(args, 3),
+                      ],
                     ),
-                    IconButtonImageShow(
-                      imageAsset: args.image2,
-                      imageText: args.image2Title,
-                      isJson: true,
-                    )
-                  ],
-                ),
-                // Gap(40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButtonImageShow(
-                      imageAsset: args.image3,
-                      imageText: args.image3Title,
-                      isJson: false,
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.exit_to_app_outlined,
-                      ),
-                      iconSize: 100,
-                      color: Colors.red,
-                      onPressed: () {
-                        SoundService.instance.stopSound();
-                        Navigator.pop(context);
-                      },
-                    ),
-                    IconButtonImageShow(
-                      imageAsset: args.image4,
-                      imageText: args.image4Title,
-                      isJson: false,
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _wordSlot(Alphabets letter, int index) {
+    if (index >= letter.words.length) {
+      return const SizedBox(width: 140, height: 140);
+    }
+    final word = letter.words[index];
+    return IconButtonImageShow(
+      imageAsset: word.id,
+      imageText: word.title,
     );
   }
 }

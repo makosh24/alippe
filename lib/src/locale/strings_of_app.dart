@@ -2,8 +2,8 @@ import 'package:alippe/src/screens/AlphabetsScreen/alphabets.dart';
 
 List<Alphabets> alphabets = [
   Alphabets(
-    name: "A",
-    smallName: "a",
+    name: "А",
+    smallName: "а",
     sound: 'a',
     image1: 'alma',
     image1Title: 'Алма',
@@ -41,7 +41,7 @@ List<Alphabets> alphabets = [
   Alphabets(
       name: "В",
       smallName: "в",
-      sound: 'b1',
+      sound: 'v',
       image1: 'vanna',
       image1Title: 'Ванна',
       image2: 'vagon',
@@ -389,7 +389,7 @@ List<Alphabets> alphabets = [
   Alphabets(
       name: "Ч",
       smallName: "ч",
-      sound: 'sh1',
+      sound: 'ch',
       image1: 'chempion',
       image1Title: 'Чемпион',
       image2: 'check',
@@ -413,13 +413,13 @@ List<Alphabets> alphabets = [
   Alphabets(
       name: "Щ",
       smallName: "щ",
-      sound: 'sh1',
+      sound: 'sch',
       image1: 'shetka',
       image1Title: 'Щетка',
       image2: 'ashshi',
-      image2Title: 'Ащщы',
+      image2Title: 'Ащы',
       image3: 'tushshi',
-      image3Title: 'Тұщщы',
+      image3Title: 'Тұщы',
       image4: 'anshi',
       image4Title: 'Аңшы'),
   Alphabets(
@@ -448,6 +448,18 @@ List<Alphabets> alphabets = [
     image4Title: '',
   ),
   Alphabets(
+      name: "І",
+      smallName: "і",
+      sound: 'i_kaz',
+      image1: 'inim',
+      image1Title: 'Інім',
+      image2: 'irimshik',
+      image2Title: 'Ірімшік',
+      image3: 'ilgish',
+      image3Title: 'Ілгіш',
+      image4: 'ishik',
+      image4Title: 'Ішік'),
+  Alphabets(
       name: "Ь",
       smallName: "ь",
       sound: 'jiniwke_belgisi',
@@ -466,7 +478,7 @@ List<Alphabets> alphabets = [
       image1: 'ekvator',
       image1Title: 'Экватор',
       image2: 'ekskalator',
-      image2Title: 'Экскалатор',
+      image2Title: 'Эскалатор',
       image3: 'ekskavator',
       image3Title: 'Экскаватор',
       image4: 'elevator',

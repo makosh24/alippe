@@ -16,16 +16,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       routes: {
         AlphabetsInScreen.routeName: (context) => const AlphabetsInScreen(),
-        FairyTalesScreen.routeName: (context) => FairyTalesScreen(),
+        FairyTalesScreen.routeName: (context) => const FairyTalesScreen(),
       },
-      onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) {
-            return const AlphabetsInScreen();
-          },
-        );
-      },
-      title: 'Navigation with Arguments',
+      title: 'Alippe',
       home: const HomeScreen(),
     );
   }

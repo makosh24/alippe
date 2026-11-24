@@ -1,3 +1,10 @@
+class LetterWord {
+  final String id;
+  final String title;
+
+  const LetterWord({required this.id, required this.title});
+}
+
 class Alphabets {
   String name;
   String smallName;
@@ -23,4 +30,13 @@ class Alphabets {
       required this.image3Title,
       required this.image4,
       required this.image4Title});
+
+  List<LetterWord> get words {
+    return [
+      LetterWord(id: image1, title: image1Title),
+      LetterWord(id: image2, title: image2Title),
+      LetterWord(id: image3, title: image3Title),
+      LetterWord(id: image4, title: image4Title),
+    ].where((word) => word.id.isNotEmpty || word.title.isNotEmpty).toList();
+  }
 }
