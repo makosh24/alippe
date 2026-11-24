@@ -1,6 +1,5 @@
 import 'package:alippe/src/components/AlphabetsComponents/media_names.dart';
 import 'package:alippe/src/components/AlphabetsComponents/sound_service.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -8,11 +7,13 @@ import 'package:lottie/lottie.dart';
 class IconButtonImageShow extends StatefulWidget {
   final String imageAsset;
   final String imageText;
+  final Color accent;
 
   const IconButtonImageShow({
     Key? key,
     required this.imageAsset,
     required this.imageText,
+    required this.accent,
   }) : super(key: key);
 
   @override
@@ -20,8 +21,8 @@ class IconButtonImageShow extends StatefulWidget {
 }
 
 class _IconButtonImageShowState extends State<IconButtonImageShow> {
-  String? _resolvedId;
-  bool _isLottie = false;
+  String? _pngId;
+  String? _lottieId;
   bool _ready = false;
 
   @override
@@ -40,75 +41,81 @@ class _IconButtonImageShowState extends State<IconButtonImageShow> {
   }
 
   Future<void> _resolve() async {
+    String? pngId;
+    String? lottieId;
     for (final candidate in imageCandidates(widget.imageAsset)) {
-      final jsonPath = 'assets/images/predmets/$candidate.json';
-      final pngPath = 'assets/images/predmets/$candidate.png';
-      if (await _exists(jsonPath)) {
-        if (!mounted) return;
-        setState(() {
-          _resolvedId = candidate;
-          _isLottie = true;
-          _ready = true;
-        });
-        return;
+      if (pngId == null &&
+          await _exists('assets/images/predmets/$candidate.png')) {
+        pngId = candidate;
       }
-      if (await _exists(pngPath)) {
-        if (!mounted) return;
-        setState(() {
-          _resolvedId = candidate;
-          _isLottie = false;
-          _ready = true;
-        });
-        return;
+      if (lottieId == null &&
+          await _exists('assets/images/predmets/$candidate.json')) {
+        lottieId = candidate;
       }
     }
     if (!mounted) return;
-    setState(() => _ready = true);
+    setState(() {
+      _pngId = pngId;
+      _lottieId = lottieId;
+      _ready = true;
+    });
   }
 
   Future<void> _play() async {
     await SoundService.instance.playTapDownSound(widget.imageAsset);
   }
 
-  Widget _picture({required BoxFit fit}) {
-    final id = _resolvedId;
-    if (id == null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              widget.imageText,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+  Widget _picture({required bool enlarged}) {
+    final pngId = _pngId;
+    final lottieId = _lottieId;
+    if (pngId != null) {
+      return Image.asset(
+        'assets/images/predmets/$pngId.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => _titleFallback(),
+      );
+    }
+    if (lottieId != null) {
+      return Lottie.asset(
+        'assets/images/predmets/$lottieId.json',
+        fit: BoxFit.contain,
+        repeat: enlarged,
+      );
+    }
+    return _titleFallback();
+  }
+
+  Widget _titleFallback() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            widget.imageText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: widget.accent,
             ),
           ),
         ),
-      );
-    }
-    if (_isLottie) {
-      return Lottie.asset(
-        'assets/images/predmets/$id.json',
-        fit: fit,
-      );
-    }
-    return Image.asset(
-      'assets/images/predmets/$id.png',
-      fit: fit,
+      ),
     );
   }
 
   void _open() {
     _play();
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) {
+        final size = MediaQuery.of(dialogContext).size;
         return Dialog(
           backgroundColor: Colors.white,
           child: SizedBox(
-            width: MediaQuery.of(dialogContext).size.width * 0.7,
-            height: MediaQuery.of(dialogContext).size.height * 0.8,
+            width: size.width * 0.62,
+            height: size.height * 0.86,
             child: Column(
               children: [
                 Align(
@@ -121,32 +128,27 @@ class _IconButtonImageShowState extends State<IconButtonImageShow> {
                   ),
                 ),
                 if (widget.imageText.isNotEmpty)
-                  AnimatedTextKit(
-                    animatedTexts: [
-                      ColorizeAnimatedText(
-                        widget.imageText,
-                        textStyle: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        colors: const [
-                          Colors.red,
-                          Colors.blue,
-                          Colors.yellow,
-                          Colors.green,
-                        ],
-                        speed: const Duration(milliseconds: 500),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      widget.imageText,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: widget.accent,
                       ),
-                    ],
-                    isRepeatingAnimation: true,
-                    repeatForever: true,
+                    ),
                   ),
                 Expanded(
                   child: InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: _play,
-                    child: _picture(fit: BoxFit.contain),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: _picture(enlarged: true),
+                    ),
                   ),
                 ),
               ],
@@ -159,23 +161,55 @@ class _IconButtonImageShowState extends State<IconButtonImageShow> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 140,
-      height: 140,
-      decoration: const BoxDecoration(
-        color: Colors.white70,
-        shape: BoxShape.circle,
-      ),
-      child: _ready
-          ? InkWell(
-              customBorder: const CircleBorder(),
-              onTap: _open,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: _picture(fit: BoxFit.contain),
+    return Column(
+      children: [
+        Expanded(
+          child: Material(
+            color: const Color(0xFFFFF8E8),
+            elevation: 8,
+            shadowColor: widget.accent.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(22),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(22),
+              onTap: _ready ? _open : null,
+              child: Ink(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(22),
+                  border: Border.all(color: widget.accent, width: 4),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: _ready
+                      ? _picture(enlarged: false)
+                      : const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                ),
               ),
-            )
-          : const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            child: Text(
+              widget.imageText,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF16324F),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
