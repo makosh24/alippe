@@ -5,11 +5,37 @@ import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MediaOverrideStore.instance.ensureLoaded();
-  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+  await _startUp();
   runApp(const MyApp());
+}
+
+/// Storage and the system UI must not keep the alphabet off the screen.
+Future<void> _startUp() async {
+  try {
+    await MediaOverrideStore.instance
+        .ensureLoaded()
+        .timeout(const Duration(seconds: 3));
+  } catch (error, stack) {
+    FlutterError.reportError(FlutterErrorDetails(
+      exception: error,
+      stack: stack,
+      library: 'alippe',
+      context: ErrorDescription('while loading letter pictures and voices'),
+    ));
+  }
+  try {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky)
+        .timeout(const Duration(seconds: 2));
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]).timeout(const Duration(seconds: 2));
+  } catch (error, stack) {
+    FlutterError.reportError(FlutterErrorDetails(
+      exception: error,
+      stack: stack,
+      library: 'alippe',
+      context: ErrorDescription('while setting landscape mode'),
+    ));
+  }
 }
