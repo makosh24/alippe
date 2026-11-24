@@ -1,7 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.alippe">
-   <application
-        android:label="Alippe"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:label="flappy_bird"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
